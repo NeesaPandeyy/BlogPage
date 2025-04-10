@@ -6,6 +6,13 @@ from .forms import RegistrationForm, LoginForm
 
 
 class RegisterView(View):
+    """
+    Handles user registration process.
+
+    If the given data are valid then it creates user,create and save hashed password
+    in database.Also flashes a success message.
+    
+    """
     def get(self, request):
         form = RegistrationForm()
         return render(request, "users/register.html", {"form": form})
@@ -22,6 +29,15 @@ class RegisterView(View):
 
 
 class LoginView(View):
+    """
+    Handles user login process.
+
+    If the given data are valid then users are directed to home page and 
+    flashes a success message.But if data are not valid it flashes a unsuccessful
+    message.
+    
+    """
+
     def get(self, request):
         form = LoginForm()
         return render(request, "users/login.html", {"form": form})
@@ -46,6 +62,13 @@ class LoginView(View):
 
 
 class LogoutView(View):
+    """
+    Handles user logout process.
+
+    When a user ask for logout,they are logged out and are 
+    redirected to the login page.
+    
+    """
     def get(self, request):
         logout(request)
         return redirect("login")

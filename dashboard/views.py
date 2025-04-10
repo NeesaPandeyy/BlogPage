@@ -18,6 +18,13 @@ User = get_user_model()
 
 
 class HomeView(LoginRequiredMixin, ListView):
+    """
+    Displays all the post uploaded in a homepage.
+
+    The posts are feteched and are showed in order they are posted.Only authenticated
+    users can view this page.Also pagination is applied and 3 blogs are shown per page.
+
+    """
     model = Post
     template_name = "dashboard/home.html"
     context_object_name = "posts"
@@ -29,6 +36,12 @@ class HomeView(LoginRequiredMixin, ListView):
 
 
 class AccountView(LoginRequiredMixin, ListView):
+    """
+    Displays post of specific user.
+
+    Shows post of logged-in users or user if username passed in url.
+    Three posts are shown per page.
+    """
     model = Post
     template_name = "users/profile.html"
     context_object_name = "posts"
@@ -63,6 +76,12 @@ class AccountView(LoginRequiredMixin, ListView):
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
+    """
+    Create the new post
+
+    Logged-in users can create post ,success message is shown when successed and
+    redirect to home.
+    """
     model = Post
     form_class = PostForm
     template_name = "dashboard/createpost.html"
@@ -75,12 +94,23 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 class PostDetailView(DetailView):
+    """
+    Shows detailed information about a specific post.
+
+    It shows the details of a single blog post using its primary key.
+    """
     model = Post
     template_name = "dashboard/post.html"
     context_object_name = "post"
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Update the exsiting post.
+
+    Only creator of post can update post.A sucess message is shown when sucessfully 
+    updated and redirect to that post.
+    """
     model = Post
     form_class = PostForm
     template_name = "dashboard/createpost.html"
@@ -100,6 +130,12 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
+    """
+    Delete the exsiting post.
+
+    Only creator of post can delete post.A sucess message is shown when sucessfully 
+    updated and redirect user to that home.
+    """
     model = Post
     success_url = reverse_lazy("dashboard:home")
 

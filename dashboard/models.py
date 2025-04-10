@@ -8,6 +8,15 @@ User = get_user_model()
 
 
 class Post(models.Model):
+    """
+    Represents a post created by a user.
+
+    Attributes:
+        title (str): Title of the post.
+        content (str): Content of the post.
+        date_posted (datetime): The time when the post was created.
+        author: Foreign key referencing the user who created the post.
+    """
     title = models.CharField(max_length=100)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
