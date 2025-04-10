@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Blog Page{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">BlogPage</div>
+        <nav>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard:home' %}">Home</a>
+                <a href="{% url 'dashboard:account' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+    {% if messages %}
+    <div class="messages" id="messages-box">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+{% endif %}
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        // Get the dropdown button and menu
+        const dropdownButton = document.querySelector('.dropdown-button');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        
+        if (dropdownButton && dropdownMenu) {
+            // Toggle dropdown on button click
+            dropdownButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent click from bubbling up
+                dropdownMenu.classList.toggle('show'); // Toggle 'show' class to display the menu
+            });
+    
+            // Close dropdown if clicked outside
+            document.addEventListener('click', function(event) {
+                if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show'); // Hide the dropdown menu
+                }
+            });
+        }
+    
+        // Post Deletion Confirmation
+        document.querySelectorAll('.dropdown-item.text-danger').forEach(button => {
+            button.addEventListener('click', function () {
+                const postId = this.getAttribute('data-id');
+                const confirmed = confirm('Are you sure you want to delete this post?');
+                if (confirmed) {
+                    document.getElementById(`delete-form-${postId}`).submit();
+                }
+            });
+        });
+    
+        // Auto-hide the message box after 3 seconds
+        setTimeout(function() {
+            const box = document.getElementById('messages-box');
+            if (box) {
+                box.style.display = 'none';
+            }
+        }, 1000); 
+    </script>
+    
+    
+</body>
+</html>

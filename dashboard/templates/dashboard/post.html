@@ -1,0 +1,32 @@
+{% extends "dashboard/layout.html" %}
+{% block content %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ '/media/default.jpg' }}" alt="Profile picture">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="author-link" href="{% url 'dashboard:user_account' username=post.author.username %}">{{ post.author.username }}</a>
+                <small class="text-muted">{{ post.time_ago }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+            
+        </div>
+
+        {% if post.author == request.user %}
+        <div class="dropdown">
+            <button class="dropdown-button">
+                <i class="fas fa-ellipsis-v">***</i> 
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'dashboard:post_update' pk=post.id %}">
+                    <button class="dropdown-item text-primary">Update</button>
+                </a>                
+                <form action="{% url 'dashboard:post_delete' pk=post.id %}" method="POST" id="delete-form-{{ post.id }}">
+                    {% csrf_token %}
+                    <button type="button" class="dropdown-item text-danger" data-id="{{ post.id }}">Delete</button>                </form>
+            </div>
+        </div>
+        {% endif %}
+    </article>
+    
+{% endblock content %}

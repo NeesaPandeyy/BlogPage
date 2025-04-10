@@ -1,0 +1,23 @@
+{% extends 'dashboard/layout.html' %}
+
+{% block title %}BlogPage{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <script>
+      window.location.href = "{% url 'dashboard/home' %}";
+    </script>
+  {% else %}
+    <div class="login-container">
+        <h2>Sign Up</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            Already have an account? <a href="{% url 'login' %}" style="color: #2baadf; text-decoration: none;">Login Here</a>
+        </p>
+    </div>
+  {% endif %}
+{% endblock %}

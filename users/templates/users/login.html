@@ -1,0 +1,29 @@
+{% extends 'dashboard/layout.html' %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <script>
+      window.location.href = "{% url 'dashboard/home' %}";
+    </script>
+  {% else %}
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}  
+
+            <div class="remember">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">LOGIN</button>
+            <div class="border-top pt-3">
+              <small class="text-muted">
+                  Dont Have An Account? <a href="{% url 'register' %} "style="color: #2baadf; text-decoration: none;" >Register Here</a>
+              </small>
+          </div>
+        </form>
+    </div>
+  {% endif %}
+{% endblock %}
