@@ -13,7 +13,7 @@
                         <a class="mr-3" href="{% url 'dashboard:user_account' username=post.author.username %}">
                             {{ post.author.username }}
                         </a>
-                        <small class="text-muted">{{ post.time_ago }}</small>
+                        <small class="text-muted">{{ post.display_date }}</small>
                     </div>
                     <h2>
                         <a class="article-title" href="{% url 'dashboard:post_detail' pk=post.id %}">

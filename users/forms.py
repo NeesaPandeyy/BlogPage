@@ -7,6 +7,14 @@ User = get_user_model()
 
 
 class RegistrationForm(UserCreationForm):
+    """ A form for user registration.
+
+    Attributes:
+        username: This field requires characters between 2 and 20.
+        email: This field requires a valid email address.
+        password: The password box requires input.
+        confirm_password:  This field must match the password field.
+    """
     email = forms.EmailField(required=True)
 
     class Meta:

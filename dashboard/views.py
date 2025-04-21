@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth import get_user_model
+from blogpage.utils import custom_date_display
 
 User = get_user_model()
 
@@ -32,7 +33,11 @@ class HomeView(LoginRequiredMixin, ListView):
     login_url = "login"
 
     def get_queryset(self):
-        return Post.objects.order_by("-date_posted")
+        posts= Post.objects.order_by("-date_posted")
+        for post in posts:
+            post.display_date = custom_date_display(post.date_posted)
+        return posts
+    
 
 
 class AccountView(LoginRequiredMixin, ListView):
@@ -48,31 +53,28 @@ class AccountView(LoginRequiredMixin, ListView):
     paginate_by = 3
 
     def get_queryset(self):
-        username = self.kwargs.get("username", None)
-        if username:
-            user = get_object_or_404(User, username=username)
-            return Post.objects.filter(author=user).order_by("-date_posted")
-        return Post.objects.filter(author=self.request.user).order_by("-date_posted")
+        username = self.kwargs.get("username")
+        self.profile_user = (
+            get_object_or_404(User, username=username)
+            if username else self.request.user
+        )
+
+        posts = Post.objects.filter(author=self.profile_user).order_by("-date_posted")
+        for post in posts:
+            post.display_date = custom_date_display(post.date_posted)
+        return posts
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        username = self.kwargs.get("username", None)
-        if username:
-            user = get_object_or_404(User, username=username)
-            context["user"] = user
-            context["profile"] = (
-                user.profile_picture.url if user.profile_picture else None
-            )
-            context["has_posts"] = bool(context["posts"])
-        else:
-            context["user"] = self.request.user
-            context["profile"] = (
-                self.request.user.profile_picture.url
-                if self.request.user.profile_picture
-                else None
-            )
-            context["has_posts"] = bool(context["posts"])
+
+        context["user"] = self.profile_user
+        context["profile"] = (
+            self.profile_user.profile_picture.url
+            if self.profile_user.profile_picture else None
+        )
+        context["has_posts"] = bool(context["posts"])
         return context
+
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):

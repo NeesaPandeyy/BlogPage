@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "dashboard",
     "users",
+    "rest_framework",
+    "django_filters"
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "home"
 LOGIN_URL = "/login/"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
