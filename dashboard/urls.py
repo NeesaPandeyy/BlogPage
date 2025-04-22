@@ -1,15 +1,9 @@
-from django.urls import path
-from .views import (
-    HomeView,
-    AccountView,
-    PostCreateView,
-    PostDetailView,
-    PostUpdateView,
-    PostDeleteView,
-)
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
 
+from .views import (AccountView, HomeView, PostCreateView, PostDeleteView,
+                    PostDetailView, PostUpdateView)
 
 app_name = "dashboard"
 

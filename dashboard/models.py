@@ -1,8 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth import get_user_model
 from django.utils.timesince import timesince
-
 
 User = get_user_model()
 
@@ -17,6 +16,7 @@ class Post(models.Model):
         date_posted (datetime): The time when the post was created.
         author: Foreign key referencing the user who created the post.
     """
+
     title = models.CharField(max_length=100)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)

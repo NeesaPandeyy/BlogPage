@@ -1,9 +1,10 @@
 from django import forms
+
 from .models import Post
 
 
 class PostForm(forms.ModelForm):
-    """ A form to post blogs.
+    """A form to post blogs.
 
     Attributes:
         title (CharField): A required text area for user to write title of content.

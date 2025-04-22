@@ -1,13 +1,13 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
 
 class RegistrationForm(UserCreationForm):
-    """ A form for user registration.
+    """A form for user registration.
 
     Attributes:
         username: This field requires characters between 2 and 20.
@@ -15,6 +15,7 @@ class RegistrationForm(UserCreationForm):
         password: The password box requires input.
         confirm_password:  This field must match the password field.
     """
+
     email = forms.EmailField(required=True)
 
     class Meta:

@@ -1,19 +1,16 @@
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from django.views.generic import (
-    ListView,
-    CreateView,
-    UpdateView,
-    DetailView,
-    DeleteView,
-)
-from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from .models import Post
-from .forms import PostForm
-from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
+
 from blogpage.utils import custom_date_display
+
+from .forms import PostForm
+from .models import Post
 
 User = get_user_model()
 
@@ -26,6 +23,7 @@ class HomeView(LoginRequiredMixin, ListView):
     users can view this page.Also pagination is applied and 3 blogs are shown per page.
 
     """
+
     model = Post
     template_name = "dashboard/home.html"
     context_object_name = "posts"
@@ -33,11 +31,10 @@ class HomeView(LoginRequiredMixin, ListView):
     login_url = "login"
 
     def get_queryset(self):
-        posts= Post.objects.order_by("-date_posted")
+        posts = Post.objects.order_by("-date_posted")
         for post in posts:
             post.display_date = custom_date_display(post.date_posted)
         return posts
-    
 
 
 class AccountView(LoginRequiredMixin, ListView):
@@ -47,6 +44,7 @@ class AccountView(LoginRequiredMixin, ListView):
     Shows post of logged-in users or user if username passed in url.
     Three posts are shown per page.
     """
+
     model = Post
     template_name = "users/profile.html"
     context_object_name = "posts"
@@ -56,7 +54,8 @@ class AccountView(LoginRequiredMixin, ListView):
         username = self.kwargs.get("username")
         self.profile_user = (
             get_object_or_404(User, username=username)
-            if username else self.request.user
+            if username
+            else self.request.user
         )
 
         posts = Post.objects.filter(author=self.profile_user).order_by("-date_posted")
@@ -70,11 +69,11 @@ class AccountView(LoginRequiredMixin, ListView):
         context["user"] = self.profile_user
         context["profile"] = (
             self.profile_user.profile_picture.url
-            if self.profile_user.profile_picture else None
+            if self.profile_user.profile_picture
+            else None
         )
         context["has_posts"] = bool(context["posts"])
         return context
-
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -84,6 +83,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     Logged-in users can create post ,success message is shown when successed and
     redirect to home.
     """
+
     model = Post
     form_class = PostForm
     template_name = "dashboard/createpost.html"
@@ -101,6 +101,7 @@ class PostDetailView(DetailView):
 
     It shows the details of a single blog post using its primary key.
     """
+
     model = Post
     template_name = "dashboard/post.html"
     context_object_name = "post"
@@ -110,9 +111,10 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     """
     Update the exsiting post.
 
-    Only creator of post can update post.A sucess message is shown when sucessfully 
+    Only creator of post can update post.A sucess message is shown when sucessfully
     updated and redirect to that post.
     """
+
     model = Post
     form_class = PostForm
     template_name = "dashboard/createpost.html"
@@ -135,9 +137,10 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     """
     Delete the exsiting post.
 
-    Only creator of post can delete post.A sucess message is shown when sucessfully 
+    Only creator of post can delete post.A sucess message is shown when sucessfully
     updated and redirect user to that home.
     """
+
     model = Post
     success_url = reverse_lazy("dashboard:home")
 
