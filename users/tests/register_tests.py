@@ -61,11 +61,9 @@ class RegisterTest(APITestCase):
             "password2": "023015@",
         }
 
-        response = self.client.post(url,data,format='json')
-        self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
-        self.assertIn("non_field_errors",response.data)
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("non_field_errors", response.data)
         self.assertIn("Passwords do not match.", response.data["non_field_errors"])
 
         self.assertFalse(User.objects.filter(username="newuserr").exists())
-
-
