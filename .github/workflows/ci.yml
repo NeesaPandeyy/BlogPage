@@ -22,5 +22,6 @@ jobs:
       - name: Run tests
         env:
           DJANGO_SETTINGS_MODULE: blogpage.settings
+          SECRET_KEY: c4*g)24aub8rynmu4dhbdh8d)h_&iezx2+$3%96n)tffv8=eli
         run: |
           pytest
